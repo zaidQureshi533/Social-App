@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    scroll-behavior: smooth;
+    font-stretch: semi-expanded;
+    user-select: auto;
+}
