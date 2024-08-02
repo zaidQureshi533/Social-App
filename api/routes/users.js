@@ -49,8 +49,8 @@ router.post('/getuser', async (req, res) => {
 	const token = req.headers['authorization'];
 	try {
 		const data = jwt.verify(token, secretKey);
-		const user = await User.findById(data.id).select("-password");
-		if(!user){
+		const user = await User.findById(data.id).select('-password');
+		if (!user) {
 			return res.status(404).json({error: 'User not found'});
 		}
 		res.status(200).json(user);
@@ -63,9 +63,26 @@ router.post('/getuser', async (req, res) => {
 router.get('/:userId', async (req, res) => {
 	const userId = req.params.userId;
 	try {
-		const user = await User.findById(userId);
-		const {email, password, updatedAt, ...other} = user._doc;
-		res.status(200).json(other);
+		const user = await User.findOne(
+			{_id: userId},
+			{email: 0, password: 0, updatedAt: 0}
+		);
+		res.status(200).json(user);
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
+
+// Get online friends
+
+router.get('/online/:id', async (req, res) => {
+	const userId = req.params.id;
+	try {
+		const onlineFriends = await User.find(
+			{$and: [{followers: userId}, {isOnline: true}]},
+			{email: 0, password: 0}
+		);
+		res.status(200).json(onlineFriends);
 	} catch (err) {
 		res.status(500).json(err);
 	}
@@ -74,20 +91,11 @@ router.get('/:userId', async (req, res) => {
 // Get friends
 router.get('/friends/:userId', async (req, res) => {
 	try {
-		const user = await User.findById(req.params.userId);
-		if (user) {
-			const friends = await Promise.all(
-				user.followings.map((friendId) => {
-					return User.findById(friendId);
-				})
-			);
-			let friendList = [];
-			friends.map((friend) => {
-				const {_id, username, profilePicture, isOnline} = friend;
-				friendList.push({_id, username, profilePicture, isOnline});
-			});
-			res.status(200).json(friendList);
-		}
+		const friends = await User.find(
+			{followers: `${req.params.userId}`},
+			{_id: 1, username: 1, profilePicture: 1, isOnline: 1}
+		);
+		res.status(200).json(friends);
 	} catch (error) {
 		res.status(400).json({error: error.message});
 	}
@@ -139,8 +147,7 @@ router.put('/:id/unfollow', async (req, res) => {
 router.post('/update/profile', async (req, res) => {
 	try {
 		const newPicture = req.body.file;
-		const user = await User.findById(req.body.id);
-		const updateProfile = await user.updateOne({profilePicture: newPicture});
+		await User.findByIdAndUpdate(req.body.id, {profilePicture: newPicture});
 		res.status(200).json({message: 'Profile updated successfully'});
 	} catch (error) {
 		res.status(500).json({message: 'Internal Server Error'});

@@ -7,18 +7,26 @@ import Profile from './pages/Profile';
 import Alert from './components/Alert';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser} from './store/states/userSlice';
+import axios from 'axios';
 
 const App = () => {
 	const CurrentUser = useSelector((state) => state.user.value);
 	const {isOnline} = CurrentUser;
 	const dispatch = useDispatch();
 
+	const API = process.env.SERVER_API;
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			dispatch(updateUser({isOnline: true}));
+			axios({
+				method: 'post',
+				url: `${API}/users/getuser`,
+				headers: {Authorization: token},
+			}).then((res) => {
+				dispatch(updateUser(res.data));
+			});
 		}
-	}, []);
+	}, [isOnline]);
 
 	const [alert, setAlert] = useState({type: '', message: ''});
 

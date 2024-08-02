@@ -19,7 +19,7 @@ const Login = ({setAlert}) => {
 			.then((res) => {
 				if (res.data.success) {
 					localStorage.setItem('token', res.data.token);
-					dispatch(updateUser({isOnline: res.data.success}));
+					dispatch(updateUser({isOnline: res.data}));
 				}
 			})
 			.catch((error) => {

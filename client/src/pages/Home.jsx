@@ -1,29 +1,10 @@
-import React, { useEffect }  from 'react';
+import React from 'react';
 import Topbar from '../components/Topbar';
 import Sidebar from '../components/Sidebar';
 import Feed from '../components/Feed';
 import Rightbar from '../components/Rightbar';
-import axios from 'axios';
-import { updateUser } from '../store/states/userSlice';
-import { useDispatch } from 'react-redux';
 
 const Home = () => {
-
-	const dispatch = useDispatch();
-	const API = process.env.SERVER_API;
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		if (token) {
-			axios({
-				method: 'post',
-				url: `${API}/users/getuser`,
-				headers: {Authorization: token},
-			}).then((res) => {
-				dispatch(updateUser(res.data));
-			});
-		}
-	}, []);
-	
 	return (
 		<>
 			<Topbar />
