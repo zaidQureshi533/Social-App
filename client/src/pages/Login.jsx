@@ -1,12 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import axios from 'axios';
 import {useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {updateUser} from '../store/states/userSlice';
+import {publicRequest} from '../configuration/requestMethod';
 const Login = ({setAlert}) => {
 	const dispatch = useDispatch();
-	const API = process.env.SERVER_API;
 	const {
 		register,
 		handleSubmit,
@@ -14,8 +13,8 @@ const Login = ({setAlert}) => {
 	} = useForm({defaultValues: {email: '', password: ''}});
 
 	const submitLoginData = (data) => {
-		axios
-			.post(`${API}/auth/login`, data)
+		publicRequest
+			.post(`/auth/login`, data)
 			.then((res) => {
 				if (res.data.success) {
 					localStorage.setItem('token', res.data.token);
@@ -73,9 +72,12 @@ const Login = ({setAlert}) => {
 							>
 								Log In
 							</button>
-							<span className='forgotPassword text-blue-700 cursor-pointer hover:underline  text-center'>
+							<Link
+								to={'/forget-password'}
+								className='forgotPassword text-blue-700 cursor-pointer hover:underline  text-center'
+							>
 								Forgot Password?
-							</span>
+							</Link>
 							<span className='createNewAccount  text-center'>
 								Don't have an account?{' '}
 								<Link

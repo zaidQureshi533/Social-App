@@ -1,15 +1,16 @@
 import React, {useRef, useState} from 'react';
-import {Close, EmojiOptions, Location, Media, Tag} from './Icons';
 import Avatar from './Avatar';
-import axios from 'axios';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-
+import {MdOutlinePermMedia, MdLocationOn, MdClose} from 'react-icons/md';
+import {BsEmojiSmileFill, BsTagFill} from 'react-icons/bs';
+import {UploadImage} from '../configuration/apiCalls';
+import {publicRequest} from '../configuration/requestMethod';
 const Share = () => {
 	const currentUser = useSelector((state) => state.user.value);
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-	const API = process.env.SERVER_API;
 	const desc = useRef();
+	const fileInputRef = useRef();
 	const [file, setFile] = useState(null);
 
 	const handleSubmit = async (e) => {
@@ -25,17 +26,26 @@ const Share = () => {
 			data.append('file', file);
 			newPost.photo = fileName;
 			try {
-				await axios.post(`${API}/upload/post`, data);
+				UploadImage('post',data);
 			} catch (err) {
 				console.log(err);
 			}
 		}
 		try {
-			await axios.post(`${API}/posts`, newPost);
+			await publicRequest.post(`/posts`, newPost);
 			window.location.reload();
 		} catch (err) {
 			console.log(err);
 		}
+	};
+
+	const handleFileChange = (e) => {
+		setFile(e.target.files[0]);
+	};
+
+	const clearFile = () => {
+		setFile(null);
+		fileInputRef.current.value = '';
 	};
 
 	return (
@@ -52,23 +62,25 @@ const Share = () => {
 						<input
 							ref={desc}
 							type='text'
-							placeholder={`What's on your mind, ${currentUser.username?.split(" ")[0]}?`}
+							placeholder={`What's on your mind, ${
+								currentUser.username?.split(' ')[0]
+							}?`}
 							className='shareInput ml-4 w-4/5 focus:outline-none text-sm'
 						/>
 					</div>
 					<hr className='shareHr mt-2' />
 					{file && (
-						<div className='relative'>
+						<div className='relative w-[30%]'>
 							<img
-								className='mt-2 rounded-md w-[30%] aspect-5/3 object-cover'
+								className='mt-2 rounded-md aspect-5/3 object-cover'
 								src={URL.createObjectURL(file)}
 								alt=''
 							/>
 							<button
-								className='absolute -top-1 -left-1'
-								onClick={() => setFile(null)}
+								className='absolute top-1 right-1 w-4 h-4 flex justify-center items-center rounded-full bg-gray-800'
+								onClick={clearFile}
 							>
-								<Close />
+								<MdClose size={12} color='#fff' />
 							</button>
 						</div>
 					)}
@@ -82,27 +94,28 @@ const Share = () => {
 								htmlFor='file'
 								className='shareOption flex items-center gap-2 cursor-pointer'
 							>
-								<Media />
+								<MdOutlinePermMedia color='tomato' size={20} />
 								<span className='shareOptiontext'>Photo or Video</span>
 								<input
+									ref={fileInputRef}
 									className='hidden'
 									type='file'
 									name='file'
 									id='file'
 									accept='.png,.jpg,.jpeg,.webp'
-									onChange={(e) => setFile(e.target.files[0])}
+									onChange={handleFileChange}
 								/>
 							</label>
 							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<Tag />
+								<BsTagFill color='#3e62da' size={20} />
 								<span className='shareOptiontext'>Tag</span>
 							</div>
 							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<Location />
+								<MdLocationOn color='green' size={24} />
 								<span className='shareOptiontext'>Location</span>
 							</div>
 							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<EmojiOptions />
+								<BsEmojiSmileFill color='#ffbf00' size={20} />
 								<span className='shareOptiontext'>Feelings</span>
 							</div>
 						</div>

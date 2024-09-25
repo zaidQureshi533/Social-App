@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Avatar from './Avatar';
-import axios from 'axios';
 export default function OnlineFriend({friend}) {
 	const {username, profilePicture, isOnline} = friend;
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;

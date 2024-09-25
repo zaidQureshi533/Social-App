@@ -7,24 +7,20 @@ import Profile from './pages/Profile';
 import Alert from './components/Alert';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUser} from './store/states/userSlice';
-import axios from 'axios';
+import ForgetPassword from './pages/Forget-Password';
+import {publicRequest} from './configuration/requestMethod';
 
 const App = () => {
 	const CurrentUser = useSelector((state) => state.user.value);
 	const {isOnline} = CurrentUser;
 	const dispatch = useDispatch();
-
-	const API = process.env.SERVER_API;
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			axios({
-				method: 'post',
-				url: `${API}/users/getuser`,
-				headers: {Authorization: token},
-			}).then((res) => {
-				dispatch(updateUser(res.data));
-			});
+			publicRequest
+				.post('/users/getuser', {}, {headers: {Authorization: token}})
+				.then((res) => dispatch(updateUser(res.data)))
+				.catch((error) => console.log(error));
 		}
 	}, [isOnline]);
 
@@ -66,6 +62,7 @@ const App = () => {
 						path='/profile/:userId/:username'
 						element={<Profile />}
 					></Route>
+					<Route path='/forget-password' element={<ForgetPassword />}></Route>
 				</Routes>
 			</BrowserRouter>
 		</>

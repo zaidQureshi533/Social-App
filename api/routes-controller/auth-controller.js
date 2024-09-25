@@ -2,8 +2,20 @@ import {validationResult} from 'express-validator';
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import {response} from 'express';
 
+dotenv.config();
 const secretKey = 'securedauthentication';
+
+const transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: process.env.AUTH_USER,
+		pass: process.env.AUTH_PASS,
+	},
+});
 
 const registerController = async (req, res) => {
 	const errors = validationResult(req);
@@ -55,8 +67,7 @@ const loginController = async (req, res) => {
 		if (!user) {
 			return res.status(400).json({
 				success: false,
-				message:
-					"The email you are trying to log-in doesn't belong to any account",
+				message: 'try to login with correct credentials',
 			});
 		}
 
@@ -68,7 +79,7 @@ const loginController = async (req, res) => {
 		if (!comparePassword) {
 			return res.status(400).json({
 				success: false,
-				message: 'Please try to login with correct credentials',
+				message: 'try to login with correct credentials',
 			});
 		}
 
@@ -84,4 +95,35 @@ const loginController = async (req, res) => {
 	}
 };
 
-export {registerController, loginController};
+const resetPasswordLink = async (req, res) => {
+	const {email} = req.body;
+	const user = await User.findOne({email});
+	if (!user) {
+		return res.status(401).json({message: 'user not found'});
+	}
+
+	const token = jwt.sign({userId: user._id}, secretKey, {expiresIn: '1h'});
+
+	const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
+	const mailOptions = {
+		from: process.env.AUTH_USER,
+		to: user.email,
+		subject: 'Password Reset',
+		text: `Click the following Link to reset your password: ${resetLink}`,
+	};
+	User.findByIdAndUpdate(user._id, {resetToken: token}).then(() => {
+		transporter.sendMail(mailOptions, (error, info) => {
+			if (error) {
+				return res.status(500).json({error: error.response, message: "internel server error"});
+			}
+			res
+				.status(200)
+				.json({
+					message:
+						'email has been sent to you, please check and follow the instructions',
+				});
+		});
+	});
+};
+
+export {registerController, loginController, resetPasswordLink};

@@ -1,23 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {Link, useParams} from 'react-router-dom';
-import {Add, Remove} from './Icons';
-import axios from 'axios';
+import {Link} from 'react-router-dom';
+import {publicRequest} from '../configuration/requestMethod';
 import OnlineFriend from './OnlineFriend';
+import {MdAdd, MdRemove} from 'react-icons/md';
 
 const Rightbar = ({user}) => {
-	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-	const API = process.env.SERVER_API;
 	const currentUser = useSelector((state) => state.user.value);
 	const [followed, setFollowed] = useState(false);
-
+	const PF = process.env.REACT_APP_PUBLIC_FOLDER
 	// Get Friends
 	const [friends, setFriends] = useState([]);
 	const [onlineFriends, setOnlineFriends] = useState([]);
 
 	useEffect(() => {
-		axios
-			.get(`${API}/users/online/${currentUser?._id}`)
+		publicRequest
+			.get(`/users/online/${currentUser?._id}`)
 			.then((res) => {
 				setOnlineFriends(res.data);
 			})
@@ -27,8 +25,8 @@ const Rightbar = ({user}) => {
 	}, []);
 	useEffect(() => {
 		user &&
-			axios
-				.get(`${API}/users/friends/${user?._id}`)
+			publicRequest
+				.get(`/users/friends/${user?._id}`)
 				.then((res) => {
 					setFriends(res.data);
 				})
@@ -42,11 +40,11 @@ const Rightbar = ({user}) => {
 	const handleFollow = async () => {
 		try {
 			if (followed) {
-				await axios.put(`${API}/users/${user?._id}/unfollow`, {
+				await publicRequest.put(`/users/${user?._id}/unfollow`, {
 					userId: currentUser._id,
 				});
 			} else {
-				await axios.put(`${API}/users/${user?._id}/follow`, {
+				await publicRequest.put(`/users/${user?._id}/follow`, {
 					userId: currentUser._id,
 				});
 			}
@@ -92,7 +90,7 @@ const Rightbar = ({user}) => {
 						onClick={handleFollow}
 					>
 						{followed ? 'Unfollow' : 'Follow'}
-						{followed ? <Remove /> : <Add />}
+						{followed ? <MdRemove /> : <MdAdd />}
 					</button>
 				)}
 				<h4 className='rightbarTitle mb-[10px] font-bold'>User information</h4>
@@ -111,7 +109,7 @@ const Rightbar = ({user}) => {
 					</div>
 					<div className='rightbarInfoItem mb-[10px]'>
 						<span className='rightbarInfoKey font-medium mr-[10px] text-[#555]'>
-							Relationship: 
+							Relationship:
 						</span>
 						<span className='rightbarInfoValue font-light'>
 							{user?.relationship}
@@ -130,9 +128,9 @@ const Rightbar = ({user}) => {
 									<img
 										src={PF + 'profile/' + friend.profilePicture}
 										alt=''
-										className='rightbarFollowingImg w-24 h-24 object-cover rounded-t-md'
+										className='rightbarFollowingImg w-full h-20 object-cover rounded-t-md'
 									/>
-									<span className='rightbarFollowingName self-center my-2 px-2 leading-5'>
+									<span className='rightbarFollowingName self-center px-2 py-1 leading-5 text-sm'>
 										{friend.username}
 									</span>
 								</div>

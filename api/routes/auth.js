@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import {
 	registerController,
 	loginController,
+	resetPasswordLink,
 } from '../routes-controller/auth-controller.js';
 
 const router = express.Router();
@@ -52,4 +53,7 @@ router.post('/logout/:userId', async (req, res) => {
 	res.status(200).send({isOnline: user.isOnline});
 });
 
+// Request For Password Reset Link
+
+router.post('/reset-password', resetPasswordLink);
 export default router;

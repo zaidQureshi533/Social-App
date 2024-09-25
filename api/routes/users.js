@@ -63,9 +63,8 @@ router.post('/getuser', async (req, res) => {
 router.get('/:userId', async (req, res) => {
 	const userId = req.params.userId;
 	try {
-		const user = await User.findOne(
-			{_id: userId},
-			{email: 0, password: 0, updatedAt: 0}
+		const user = await User.findOne({_id: userId}).select(
+			'-email -password -createdAt'
 		);
 		res.status(200).json(user);
 	} catch (err) {
@@ -78,10 +77,9 @@ router.get('/:userId', async (req, res) => {
 router.get('/online/:id', async (req, res) => {
 	const userId = req.params.id;
 	try {
-		const onlineFriends = await User.find(
-			{$and: [{followers: userId}, {isOnline: true}]},
-			{email: 0, password: 0}
-		);
+		const onlineFriends = await User.find({
+			$and: [{followers: userId}, {isOnline: true}],
+		}).select('-email -password');
 		res.status(200).json(onlineFriends);
 	} catch (err) {
 		res.status(500).json(err);
@@ -91,9 +89,8 @@ router.get('/online/:id', async (req, res) => {
 // Get friends
 router.get('/friends/:userId', async (req, res) => {
 	try {
-		const friends = await User.find(
-			{followers: `${req.params.userId}`},
-			{_id: 1, username: 1, profilePicture: 1, isOnline: 1}
+		const friends = await User.find({followers: `${req.params.userId}`}).select(
+			'_id username profilePicture isOnline'
 		);
 		res.status(200).json(friends);
 	} catch (error) {
