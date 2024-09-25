@@ -38,18 +38,18 @@ const Login = ({setAlert}) => {
 							Connect with friends and the world around you on facebook.
 						</span>
 					</div>
-					<div className='loginRight flex-1 flex flex-col justify-center'>
+					<div className='loginRight flex-1 flex flex-col items-center'>
 						<form
 							onSubmit={handleSubmit(submitLoginData)}
-							className='loginBox flex flex-col gap-4 p-5 bg-white rounded-[10px]'
+							className='loginBox w-4/5 flex flex-col gap-4 p-5 bg-white rounded-[10px]'
 						>
 							<input
 								{...register('email', {required: 'Please enter your email'})}
 								placeholder={errors.email ? errors.email.message : 'Email'}
 								name='email'
-								className={`loginInput px-2 py-4 border rounded-md text-sm focus:outline-[#474747] ${
+								className={`loginInput px-2 py-3 border rounded-md text-sm focus:outline-[#474747] ${
 									errors.email && 'placeholder-red-600'
-								}`}
+								} focus:outline-gray-400`}
 								autoComplete='true'
 							/>
 							<input
@@ -61,24 +61,24 @@ const Login = ({setAlert}) => {
 								}
 								name='password'
 								type='password'
-								className={`loginInput px-2 py-4 border rounded-md text-sm focus:outline-[#474747] ${
+								className={`loginInput px-2 py-3 border rounded-md text-sm focus:outline-[#474747] ${
 									errors.password && 'placeholder-red-600'
-								}`}
+								} focus:outline-gray-400`}
 								autoComplete='false'
 							/>
 							<button
 								type='submit'
-								className='loginButton bg-[#3e62da] text-white py-3 font-bold text-xl rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150'
+								className='loginButton bg-[#3e62da] text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150'
 							>
 								Log In
 							</button>
 							<Link
 								to={'/forget-password'}
-								className='forgotPassword text-blue-700 cursor-pointer hover:underline  text-center'
+								className='forgotPassword text-blue-700 cursor-pointer hover:underline text-center text-sm'
 							>
 								Forgot Password?
 							</Link>
-							<span className='createNewAccount  text-center'>
+							<span className='createNewAccount text-center text-sm'>
 								Don't have an account?{' '}
 								<Link
 									to='/register'
