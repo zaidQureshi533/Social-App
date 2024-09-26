@@ -9,6 +9,9 @@ import {
 	IoNotificationsSharp,
 } from 'react-icons/io5';
 import {publicRequest} from '../configuration/requestMethod';
+import {IoPersonCircleSharp} from 'react-icons/io5';
+import {HiLogout} from 'react-icons/hi';
+import Dropdown from './Dropdown';
 const Topbar = () => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 	const navigate = useNavigate();
@@ -39,12 +42,6 @@ const Topbar = () => {
 						placeholder='Search For Friends, Posts or Videos'
 					/>
 				</div>
-				<button
-					className=' font-bold px-3 rounded text-nowrap'
-					onClick={handleLogOut}
-				>
-					Log Out
-				</button>
 			</div>
 			<div className='topbarRight w-full md:w-1/4 flex items-center md:justify-end justify-between gap-7 mt-3 md:mt-0'>
 				<div className='flex gap-4'>
@@ -67,13 +64,30 @@ const Topbar = () => {
 						</span>
 					</div>
 				</div>
-				<Link to={`/profile/${currentUser._id}/${currentUser.username}`}>
-					<Avatar
-						src={`${PF + 'profile/' + currentUser.profilePicture}`}
-						isOnline={currentUser.isOnline}
-						alt='Profile Photo'
-					/>
-				</Link>
+				<Dropdown
+					label={
+						<Avatar
+							src={`${PF + 'profile/' + currentUser.profilePicture}`}
+							isOnline={currentUser.isOnline}
+							alt='Profile Photo'
+						/>
+					}
+				>
+					<Link
+						className='flex justify-between items-center px-4 py-2 text-sm  hover:bg-gray-100 hover:text-black transition-all duration-150'
+						to={`/profile/${currentUser._id}/${currentUser.username}`}
+					>
+						Profile
+						<IoPersonCircleSharp size={26} />
+					</Link>
+					<button
+						className='flex justify-between w-full items-center px-4 py-2 text-sm  hover:bg-gray-100 hover:text-black transition-all duration-150'
+						onClick={handleLogOut}
+					>
+						Log Out
+						<HiLogout size={20} />
+					</button>
+				</Dropdown>
 			</div>
 		</div>
 	);
