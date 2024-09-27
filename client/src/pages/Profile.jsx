@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import {FaCamera} from 'react-icons/fa';
 import {publicRequest} from '../configuration/requestMethod';
 import {UploadImage} from '../configuration/apiCalls';
+import Modal from '../components/Modal';
 const Profile = () => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -60,36 +61,14 @@ const Profile = () => {
 	return (
 		<>
 			<Topbar />
-			{/* Confirmation modal for updating profile */}
-			{file && (
-				<>
-					<div className='fixed top-0 h-dvh w-full flex justify-center items-center z-20 animate-zoomIn'>
-						<div className='bg-black bg-opacity-50 fixed top-0 h-full w-full flex justify-center items-center'>
-							<div className='modal w-[30%] rounded-sm shadow-md bg-white p-4 flex flex-col gap-8 '>
-								<div className='modal-top'>
-									<span className='text-md text-center text-gray-600 font-medium'>
-										Are you Sure you want to update your profile picture!
-									</span>
-								</div>
-								<div className='modal-bottom flex justify-between'>
-									<button
-										onClick={handleProfileUpdate}
-										className='py-1 px-2 bg-sky-600 hover:bg-sky-700 hover:shadow-md transition-all duration-100 text-white rounded-sm'
-									>
-										Update
-									</button>
-									<button
-										onClick={clearFile}
-										className='py-1 px-2 border hover:bg-gray-200 hover:shadow-md transition-all duration-100 rounded-sm'
-									>
-										Cancel
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</>
-			)}
+			<Modal
+				isOpen={file ? true : false}
+				title='Update Profile Photo'
+				message='Are you sure! you want to update your profile image?'
+				buttonLabel='Update'
+				onAction={handleProfileUpdate}
+				onCancle={clearFile}
+			/>
 			<div className='profile flex'>
 				<div className='profileLeftbar w-1/4'>
 					<Sidebar />

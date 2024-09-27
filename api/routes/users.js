@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/User.js';
+import Post from '../models/Post.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 const router = express.Router();
@@ -31,16 +32,34 @@ router.put('/:id', async (req, res) => {
 
 // Delete user
 router.delete('/:id', async (req, res) => {
-	if (req.body.userId === req.params.id || req.body.isAdmin) {
-		try {
-			await User.findByIdAndDelete(req.params.id);
-			res.status(200).json('Account has been deleted');
-		} catch (err) {
-			return res.status(500).json(err);
-		}
-	} else {
-		return res.status(403).json('You can delete only your account!');
+	const userId = req.params.id;
+	try {
+		const deleteUser = await User.findByIdAndDelete(userId);
+		const removeUserFriends = await User.updateMany(
+			{$or: [{followers: userId}, {followings: userId}]},
+			{$pull: {followers: userId, followings: userId}}
+		);
+		const deleteUserPosts = await Post.deleteMany({
+			userId,
+		});
+		const unlikePosts = await Post.updateMany(
+			{likes: userId},
+			{$pull: {likes: userId}}
+		);
+		res.status(200).send('Account Deleted Succesfully');
+	} catch (err) {
+		return res.status(500).json(err);
 	}
+	// if (req.body.userId === req.params.id || req.body.isAdmin) {
+	// 	try {
+	// 		await User.findByIdAndDelete(req.params.id);
+	// 		res.status(200).json('Account has been deleted');
+	// 	} catch (err) {
+	// 		return res.status(500).json(err);
+	// 	}
+	// } else {
+	// 	return res.status(403).json('You can delete only your account!');
+	// }
 });
 
 // Get Current User Detail

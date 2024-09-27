@@ -11,13 +11,16 @@ import {
 import {publicRequest} from '../configuration/requestMethod';
 import {IoPersonCircleSharp} from 'react-icons/io5';
 import {HiLogout} from 'react-icons/hi';
+import {MdOutlineDelete} from 'react-icons/md';
 import Dropdown from './Dropdown';
+import {useState} from 'react';
+import Modal from './Modal';
 const Topbar = () => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const currentUser = useSelector((state) => state.user.value);
-
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const handleLogOut = async () => {
 		publicRequest.post(`/auth/logout/${currentUser._id}`).then((res) => {
 			localStorage.removeItem('token');
@@ -26,6 +29,17 @@ const Topbar = () => {
 		});
 	};
 
+	const handleDeleteAccount = async () => {
+		setShowDeleteModal(false)
+		publicRequest
+			.delete(`/users/${currentUser._id}`)
+			.then(() => {
+				localStorage.removeItem('token');
+				dispatch(updateUser({isLogin: false}));
+				navigate('/login');
+			})
+			.catch((error) => console.log(error));
+	};
 	return (
 		<div className='topbar bg-[#3e62da] text-white p-2 px-4 flex flex-col md:flex-row items-start md:items-center text-sm h-13 sticky top-0 z-10'>
 			<div className='topbarLeft flex w-full md:w-3/4 justify-between gap-3'>
@@ -80,6 +94,23 @@ const Topbar = () => {
 						Profile
 						<IoPersonCircleSharp size={26} />
 					</Link>
+					<Modal
+						title='Delete Account'
+						message='Your account will be deleted permanently'
+						isOpen={showDeleteModal}
+						buttonLabel='Delete'
+						onAction={handleDeleteAccount}
+						onCancle={()=> setShowDeleteModal(false)}
+					>
+						<button
+							className='flex justify-between w-full items-center px-4 py-2 text-sm  hover:bg-gray-100 hover:text-black transition-all duration-150'
+							onClick={()=> setShowDeleteModal(true)}
+						>
+							Delete Account
+							<MdOutlineDelete size={24} />
+						</button>
+					</Modal>
+					<hr />
 					<button
 						className='flex justify-between w-full items-center px-4 py-2 text-sm  hover:bg-gray-100 hover:text-black transition-all duration-150'
 						onClick={handleLogOut}
