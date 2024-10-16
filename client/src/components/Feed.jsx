@@ -20,11 +20,19 @@ const Feed = () => {
 		};
 		fetchData();
 	}, [userId, currentUser._id]);
+
+	const handleDeletePost = (postId) => {
+		const newPosts = posts.filter((post) => post._id !== postId);
+		setPosts(newPosts);
+	};
+
 	return (
 		<div className='feedbar p-4'>
 			{(!userId || userId === currentUser._id) && <Share />}
 			{posts.map((post) => {
-				return <Post key={post._id} post={post} />;
+				return (
+					<Post key={post._id} post={post} onDeletePost={handleDeletePost} />
+				);
 			})}
 		</div>
 	);

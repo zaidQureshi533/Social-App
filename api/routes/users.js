@@ -34,36 +34,31 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 	const userId = req.params.id;
 	try {
-		const deleteUser = await User.findByIdAndDelete(userId);
-		const removeUserFriends = await User.updateMany(
-			{$or: [{followers: userId}, {followings: userId}]},
+		// delete user
+		await User.findByIdAndDelete(userId);
+		// remove user from other users followers and followings
+		await User.updateMany(
+			{
+				$or: [{followers: userId}, {followings: userId}],
+			},
 			{$pull: {followers: userId, followings: userId}}
 		);
-		const deleteUserPosts = await Post.deleteMany({
-			userId,
+		// delete user posts
+		await Post.deleteMany({
+			user: userId,
 		});
-		const unlikePosts = await Post.updateMany(
-			{likes: userId},
-			{$pull: {likes: userId}}
+		// unlike posts / liked by deleted user
+		await Post.updateMany(
+			{$or: [{likes: userId}, {'comments.user': userId}]},
+			{$pull: {likes: userId, comments: {user: userId}}}
 		);
 		res.status(200).send('Account Deleted Succesfully');
 	} catch (err) {
 		return res.status(500).json(err);
 	}
-	// if (req.body.userId === req.params.id || req.body.isAdmin) {
-	// 	try {
-	// 		await User.findByIdAndDelete(req.params.id);
-	// 		res.status(200).json('Account has been deleted');
-	// 	} catch (err) {
-	// 		return res.status(500).json(err);
-	// 	}
-	// } else {
-	// 	return res.status(403).json('You can delete only your account!');
-	// }
 });
 
 // Get Current User Detail
-
 router.post('/getuser', async (req, res) => {
 	const token = req.headers['authorization'];
 	try {

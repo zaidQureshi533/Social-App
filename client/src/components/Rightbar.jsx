@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {publicRequest} from '../configuration/requestMethod';
 import OnlineFriend from './OnlineFriend';
-import {MdAdd, MdRemove} from 'react-icons/md';
+import {MdAdd, MdRemove} from './icons';
 
 const Rightbar = ({user}) => {
 	const currentUser = useSelector((state) => state.user.value);

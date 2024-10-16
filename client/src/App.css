@@ -1,0 +1,10 @@
+body {
+	background-color: rgb(252, 250, 250);
+}
+
+.bg-blue {
+	background-color: #3f64df;
+}
+.text-blue {
+	color: #3f64df;
+}

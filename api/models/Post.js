@@ -2,31 +2,38 @@ import mongoose from 'mongoose';
 import User from './User.js';
 const {Schema, model} = mongoose;
 
-const CommentSchema = new Schema({
-	userId: {
-		type: String,
-		required: true,
-	},
-	body: {
-		message: {
-			type: String,
+const CommentSchema = new Schema(
+	{
+		user: {
+			type: Schema.Types.ObjectId,
+			ref: 'User',
 			required: true,
 		},
-		image: {
-			type: String,
-			required: false,
+		body: {
+			message: {
+				type: String,
+				required: false,
+				default: '',
+			},
+			image: {
+				type: String,
+				required: false,
+				default: '',
+			},
+		},
+		likes: {
+			type: [Schema.Types.ObjectId],
+			ref: 'User',
+			default: [],
 		},
 	},
-	likes: {
-		type: [Schema.Types.ObjectId],
-		ref: 'User',
-		default: [],
-	},
-});
+	{timestamps: true}
+);
 const PostSchema = new Schema(
 	{
-		userId: {
-			type: String,
+		user: {
+			type: Schema.Types.ObjectId,
+			ref: 'User',
 			required: true,
 		},
 		desc: {

@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {updateUser} from '../store/states/userSlice';
+import {login} from '../store/states/userSlice';
 import {publicRequest} from '../configuration/requestMethod';
-const Login = ({setAlert}) => {
+import {MdVisibility, MdVisibilityOff} from '../components/icons';
+import {ThemeContext} from '../App';
+const Login = () => {
+	const {showAlert} = useContext(ThemeContext);
+	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
 	const {
 		register,
@@ -18,11 +22,11 @@ const Login = ({setAlert}) => {
 			.then((res) => {
 				if (res.data.success) {
 					localStorage.setItem('token', res.data.token);
-					dispatch(updateUser({isOnline: res.data}));
+					dispatch(login({isOnline: res.data}));
 				}
 			})
 			.catch((error) => {
-				setAlert('danger', error.response.data.message);
+				showAlert('danger', error.response.data.message);
 			});
 	};
 
@@ -30,63 +34,80 @@ const Login = ({setAlert}) => {
 		<>
 			<div className='login w-full md:h-dvh bg-[#f0f2f5] flex items-center justify-center'>
 				<div className='loginWrapper w-full md:w-[70%] p-12 md:p-0 flex flex-col md:flex-row'>
-					<div className='loginLeft flex-1 flex flex-col justify-center mb-10 md:m-0'>
-						<h3 className='loginLogo text-[50px] font-extrabold text-[#3e62da] mb-2'>
+					<div className='loginLeft flex-1 flex flex-col justify-center mb-10 md:m-0 select-none'>
+						<h3 className='loginLogo text-[60px] font-extrabold text-blue mb-2'>
 							facebook
 						</h3>
-						<span className='loginDescription text-xl font-medium pe-10'>
-							Connect with friends and the world around you on facebook.
+						<span className='loginDescription text-2xl font-medium pe-10'>
+							Facebook helps you connect and share with the people in your life.
 						</span>
 					</div>
 					<div className='loginRight flex-1 flex flex-col items-center'>
 						<form
 							onSubmit={handleSubmit(submitLoginData)}
-							className='loginBox w-4/5 flex flex-col gap-4 p-5 bg-white rounded-[10px]'
+							className='loginBox w-full md:w-4/5 flex flex-col gap-4 p-5 bg-white rounded-[10px] shadow-xl'
 						>
 							<input
-								{...register('email', {required: 'Please enter your email'})}
+								{...register('email', {
+									required: 'Email is required',
+									pattern: {
+										value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+										message: 'Invalid email address',
+									},
+								})}
 								placeholder={errors.email ? errors.email.message : 'Email'}
 								name='email'
-								className={`loginInput px-2 py-3 border rounded-md text-sm focus:outline-[#474747] ${
+								className={`loginInput p-3 border rounded-md focus:outline-[#3e62da] ${
 									errors.email && 'placeholder-red-600'
 								} focus:outline-gray-400`}
 								autoComplete='true'
 							/>
-							<input
-								{...register('password', {
-									required: 'Please enter your password',
-								})}
-								placeholder={
-									errors.password ? errors.password.message : 'password'
-								}
-								name='password'
-								type='password'
-								className={`loginInput px-2 py-3 border rounded-md text-sm focus:outline-[#474747] ${
-									errors.password && 'placeholder-red-600'
-								} focus:outline-gray-400`}
-								autoComplete='false'
-							/>
+							<div className='relative'>
+								<input
+									{...register('password', {
+										required: 'Password is required',
+									})}
+									placeholder={
+										errors.password ? errors.password.message : 'Password'
+									}
+									name='password'
+									type={`${showPassword ? 'text' : 'password'}`}
+									className={`loginInput w-full p-3 border rounded-md focus:outline-[#3e62da] ${
+										errors.password && 'placeholder-red-600'
+									} focus:outline-gray-400`}
+									autoComplete='false'
+								/>
+								<button
+									tabIndex={-1}
+									type='button'
+									className='absolute right-3 top-4 text-gray-600 focus:outline-none'
+									onClick={() => setShowPassword(!showPassword)}
+								>
+									{showPassword ? (
+										<MdVisibility size={20} />
+									) : (
+										<MdVisibilityOff size={20} />
+									)}
+								</button>
+							</div>
 							<button
 								type='submit'
-								className='loginButton bg-[#3e62da] text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150'
+								className='loginButton text-xl bg-blue text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150 outline-none'
 							>
 								Log In
 							</button>
-							<Link
-								to={'/forget-password'}
-								className='forgotPassword text-blue-700 cursor-pointer hover:underline text-center text-sm'
+							<span
+								className='forgotPassword text-blue-700 cursor-pointer hover:underline text-center text-sm outline-none'
 							>
-								Forgot Password?
-							</Link>
-							<span className='createNewAccount text-center text-sm'>
-								Don't have an account?{' '}
-								<Link
-									to='/register'
-									className='cursor-pointer hover:underline font-bold text-gray-700'
-								>
-									Create Account
-								</Link>
+								Forget Password?
 							</span>
+							<hr className='mt-2' />
+							<Link
+								to={'/register'}
+								className='loginButton text-center text-xl bg-[#4bbe2e] text-white py-3 font-bold rounded-md hover:bg-[#4bbe2e]/90 hover:shadow-md transition-all duration-150 outline-none'
+							>
+								Create new account
+							</Link>
 						</form>
 					</div>
 				</div>

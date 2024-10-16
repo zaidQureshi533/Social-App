@@ -1,15 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import CloseFriend from './CloseFriend';
 import {useSelector} from 'react-redux';
-import { SlFeed } from "react-icons/sl";
-import { RiGroupLine } from "react-icons/ri";
 import {
+	SlFeed,
+	RiGroupLine,
 	MdChatBubbleOutline,
 	MdOutlinePersonalVideo,
 	MdOutlineInfo,
 	MdOutlineEvent,
 	MdOutlineBookmarkBorder,
-} from 'react-icons/md';
+} from './icons';
+
 import axios from 'axios';
 const Sidebar = () => {
 	const navItem = [

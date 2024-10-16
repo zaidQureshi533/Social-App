@@ -48,8 +48,7 @@ router.post(
 router.post('/logout/:userId', async (req, res) => {
 	const Id = req.params.userId;
 	await User.findByIdAndUpdate(Id, {isOnline: false});
-	const user = await User.findById(Id);
-	res.status(200).send({isOnline: user.isOnline});
+	res.status(200).send('logout successfully');
 });
 
 export default router;

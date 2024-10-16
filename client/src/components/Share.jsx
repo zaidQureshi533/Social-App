@@ -2,8 +2,13 @@ import React, {useRef, useState} from 'react';
 import Avatar from './Avatar';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {MdOutlinePermMedia, MdLocationOn, MdClose} from 'react-icons/md';
-import {BsEmojiSmileFill, BsTagFill} from 'react-icons/bs';
+import {
+	MdOutlinePermMedia,
+	MdLocationOn,
+	MdClose,
+	BsEmojiSmileFill,
+	BsTagFill,
+} from './icons';
 import {UploadImage} from '../configuration/apiCalls';
 import {publicRequest} from '../configuration/requestMethod';
 const Share = () => {
@@ -16,7 +21,7 @@ const Share = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const newPost = {
-			userId: currentUser._id,
+			user: currentUser._id,
 			desc: desc.current.value,
 		};
 		if (file) {
@@ -26,7 +31,7 @@ const Share = () => {
 			data.append('file', file);
 			newPost.photo = fileName;
 			try {
-				UploadImage('post',data);
+				UploadImage('post', data);
 			} catch (err) {
 				console.log(err);
 			}
@@ -65,7 +70,7 @@ const Share = () => {
 							placeholder={`What's on your mind, ${
 								currentUser.username?.split(' ')[0]
 							}?`}
-							className='shareInput ml-4 w-4/5 focus:outline-none text-sm'
+							className='shareInput ml-4 w-4/5 focus:outline-none text-sm bg-transparent'
 						/>
 					</div>
 					<hr className='shareHr mt-2' />
@@ -102,7 +107,7 @@ const Share = () => {
 									type='file'
 									name='file'
 									id='file'
-									accept='.png,.jpg,.jpeg,.webp'
+									accept='.png,.jpg,.jpeg,.webp,.jfif,.avif'
 									onChange={handleFileChange}
 								/>
 							</label>
