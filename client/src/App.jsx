@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {login} from './store/states/userSlice';
 import {publicRequest} from './configuration/requestMethod';
 import Post from './pages/Post';
+import ScrollToTop from './components/ScrollToTop';
 
 export const ThemeContext = createContext();
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
 			<Alert alert={alert} />
 			<ThemeContext.Provider value={{showAlert}}>
 				<BrowserRouter>
+					<ScrollToTop />
 					<Routes>
 						<Route
 							exact

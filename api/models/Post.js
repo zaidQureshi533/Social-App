@@ -43,10 +43,6 @@ const PostSchema = new Schema(
 		photo: {
 			type: String,
 		},
-		date: {
-			type: Date,
-			default: Date.now,
-		},
 		likes: {
 			type: Array,
 			default: [],

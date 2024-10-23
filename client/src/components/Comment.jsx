@@ -37,7 +37,7 @@ const Comment = ({comment, onDelete}) => {
 						<div className={`${message && 'bg-gray-100'} rounded-lg py-2 px-3`}>
 							<Link
 								to={`/profile/${_id}/${username}`}
-								className='font-bold hover:underline'
+								className='font-bold hover:underline h4'
 							>
 								{username}
 							</Link>
@@ -53,7 +53,7 @@ const Comment = ({comment, onDelete}) => {
 						)}
 						<div className='flex gap-10 px-2 select-none mt-1'>
 							<span className='text-xs'>{format(comment.createdAt)}</span>
-							<span className='text-xs font-semibold'>Like</span>
+							<span className='font-semibold text-xs'>Like</span>
 						</div>
 					</div>
 					{comment.user._id === currentUser._id && (

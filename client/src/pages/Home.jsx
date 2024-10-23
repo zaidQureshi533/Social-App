@@ -8,17 +8,21 @@ const Home = () => {
 	return (
 		<>
 			<Topbar />
-			<div className='homeContainer flex'>
-				<div className='w-1/4'>
-					<Sidebar />
+			<section>
+				<div className=''>
+					<div className='flex'>
+						<div className='w-1/4 hidden lg:block'>
+							<Sidebar />
+						</div>
+						<div className='w-full lg:w-2/4'>
+							<Feed />
+						</div>
+						<div className='w-1/4 hidden lg:block'>
+							<Rightbar />
+						</div>
+					</div>
 				</div>
-				<div className='w-2/4'>
-					<Feed />
-				</div>
-				<div className='w-1/4'>
-					<Rightbar />
-				</div>
-			</div>
+			</section>
 		</>
 	);
 };

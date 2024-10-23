@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useEffect, useState, lazy} from 'react';
 import Share from './Share';
-import Post from './Post';
 import {useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {publicRequest} from '../configuration/requestMethod';
+const Post = lazy(() => import('./Post'));
 
 const Feed = () => {
 	const {userId} = useParams();
@@ -27,9 +26,9 @@ const Feed = () => {
 	};
 
 	return (
-		<div className='feedbar p-4'>
+		<div className='feedbar p-4 '>
 			{(!userId || userId === currentUser._id) && <Share />}
-			{posts.map((post) => {
+			{posts?.map((post) => {
 				return (
 					<Post key={post._id} post={post} onDeletePost={handleDeletePost} />
 				);

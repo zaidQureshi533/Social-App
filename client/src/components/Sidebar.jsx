@@ -70,12 +70,12 @@ const Sidebar = () => {
 						const {icon, label} = item;
 						return (
 							<li
-								className='px-4 py-1 hover:bg-gray-100 transition-all duration-150 border-b'
+								className='px-4 py-2 hover:bg-gray-100 transition-all duration-150 border-b'
 								key={crypto.randomUUID()}
 							>
 								<a href='#' className='flex items-center p-2'>
 									{icon}
-									<span className='ms-5 text-gray-700'>{label}</span>
+									<span className='ms-5 text-gray-700 '>{label}</span>
 								</a>
 							</li>
 						);

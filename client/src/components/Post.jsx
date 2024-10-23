@@ -119,9 +119,9 @@ const Post = ({post, onDeletePost, postId}) => {
 							</Link>
 							<div className='flex flex-col'>
 								<Link to={`/profile/${user._id}/${user.username}`}>
-									<span className='postUsername text-gray-800 font-semibold hover:underline cursor-pointer'>
+									<h4 className='postUsername text-gray-800 font-semibold hover:underline cursor-pointer'>
 										{user.username}
-									</span>
+									</h4>
 								</Link>
 								<span className='postDate text-sm text-gray-600'>
 									{format(createdAt)}
@@ -174,7 +174,7 @@ const Post = ({post, onDeletePost, postId}) => {
 										<BiSolidLike color='#ffff' size={14} />
 									</div>
 								)}
-								<span className='postLikeCounter select-none'>
+								<span className='postLikeCounter select-none text-sm'>
 									{likeCount === 0
 										? ''
 										: isLiked && likeCount === 1
@@ -185,7 +185,7 @@ const Post = ({post, onDeletePost, postId}) => {
 								</span>
 							</div>
 							<div className='postBottomRight'>
-								<span className='postComment select-none cursor-pointer'>
+								<span className='postComment select-none cursor-pointer text-sm'>
 									{postComments.length > 0 ? postComments.length : ''}
 									{postComments.length > 1 ? ' Comments' : ' Comment'}
 								</span>

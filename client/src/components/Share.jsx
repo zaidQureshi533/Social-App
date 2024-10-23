@@ -55,8 +55,8 @@ const Share = () => {
 
 	return (
 		<>
-			<div className='share w-full  rounded-lg shadow-[0_0_14px_-8px_rgba(0,0,0,0.4)] p-3'>
-				<div className='shareWrapper'>
+			<div>
+				<div className='shareWrapper w-full rounded-lg shadow-[0_0_14px_-8px_rgba(0,0,0,0.4)] p-3'>
 					<div className='shareTop flex items-center'>
 						<Link to={`/profile/${currentUser._id}/${currentUser.username}`}>
 							<Avatar
@@ -73,7 +73,7 @@ const Share = () => {
 							className='shareInput ml-4 w-4/5 focus:outline-none text-sm bg-transparent'
 						/>
 					</div>
-					<hr className='shareHr mt-2' />
+					<hr className='shareHr my-4' />
 					{file && (
 						<div className='relative w-[30%]'>
 							<img
@@ -90,42 +90,41 @@ const Share = () => {
 						</div>
 					)}
 					<form
-						className='shareBottom flex items-center justify-between p-4'
+						className='shareBottom flex items-center justify-between'
 						onSubmit={handleSubmit}
 						encType='multipart/form-data'
 					>
-						<div className='shareOptions flex gap-7 text-sm'>
-							<label
-								htmlFor='file'
-								className='shareOption flex items-center gap-2 cursor-pointer'
-							>
-								<MdOutlinePermMedia color='tomato' size={20} />
-								<span className='shareOptiontext'>Photo or Video</span>
-								<input
-									ref={fileInputRef}
-									className='hidden'
-									type='file'
-									name='file'
-									id='file'
-									accept='.png,.jpg,.jpeg,.webp,.jfif,.avif'
-									onChange={handleFileChange}
-								/>
-							</label>
-							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<BsTagFill color='#3e62da' size={20} />
-								<span className='shareOptiontext'>Tag</span>
-							</div>
-							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<MdLocationOn color='green' size={24} />
-								<span className='shareOptiontext'>Location</span>
-							</div>
-							<div className='shareOption flex items-center gap-2 cursor-pointer'>
-								<BsEmojiSmileFill color='#ffbf00' size={20} />
-								<span className='shareOptiontext'>Feelings</span>
-							</div>
+						<label
+							htmlFor='file'
+							className='shareOption flex items-center gap-2 cursor-pointer'
+						>
+							<MdOutlinePermMedia color='tomato' size={20} />
+							<span className='shareOptiontext hidden md:block'>Photo or Video</span>
+							<input
+								ref={fileInputRef}
+								className='hidden'
+								type='file'
+								name='file'
+								id='file'
+								accept='.png,.jpg,.jpeg,.webp,.jfif,.avif'
+								onChange={handleFileChange}
+							/>
+						</label>
+						<div className='shareOption flex items-center gap-2 cursor-pointer'>
+							<BsTagFill color='#3e62da' size={20} />
+							<span className='shareOptiontext hidden md:block'>Tag</span>
 						</div>
+						<div className='shareOption flex items-center gap-2 cursor-pointer'>
+							<MdLocationOn color='green' size={24} />
+							<span className='shareOptiontext hidden md:block'>Location</span>
+						</div>
+						<div className='shareOption flex items-center gap-2 cursor-pointer'>
+							<BsEmojiSmileFill color='#ffbf00' size={20} />
+							<span className='shareOptiontext hidden md:block'>Feelings</span>
+						</div>
+
 						<button
-							className='bg-green-600 text-white px-4 py-1 rounded-md hover:bg-green-700 hover:shadow-md transition-all duration-100'
+							className='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 hover:shadow-md transition-all duration-100'
 							type='submit'
 						>
 							Share
