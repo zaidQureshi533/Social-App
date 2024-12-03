@@ -23,7 +23,7 @@ const Post = () => {
 		<>
 			<Topbar />
 			<div className='flex justify-between'>
-				<div className='w-full lg:w-2/4 mx-auto px-3'>
+				<div className='w-full lg:w-2/4 mx-auto px-3 my-5'>
 					{post && <CurrentPost post={post} postId />}
 				</div>
 				<div className='w-1/4 hidden lg:block'>

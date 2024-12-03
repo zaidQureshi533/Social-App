@@ -21,24 +21,28 @@ import {
 
 import Modal from './Modal';
 import Tooltip from './Tooltip';
+import {emitLogoutUser, socket} from '../configuration/socket';
+
+import Chats from './Chats';
+import Notifications from './Notifications';
 const Topbar = () => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const currentUser = useSelector((state) => state.user.value);
+	const CurrentUser = useSelector((state) => state.user.value);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+
 	const handleLogOut = async () => {
-		publicRequest.post(`/auth/logout/${currentUser._id}`).then(() => {
-			localStorage.removeItem('token');
-			dispatch(logout());
-			navigate('/login');
-		});
+		emitLogoutUser(CurrentUser._id);
+		localStorage.removeItem('token');
+		dispatch(logout());
+		navigate('/login');
 	};
 
 	const handleDeleteAccount = async () => {
 		setShowDeleteModal(false);
 		publicRequest
-			.delete(`/users/${currentUser._id}`)
+			.delete(`/users/${CurrentUser._id}`)
 			.then(() => {
 				localStorage.removeItem('token');
 				dispatch(logout());
@@ -47,15 +51,15 @@ const Topbar = () => {
 			.catch((error) => console.log(error));
 	};
 	return (
-		<header className='sticky top-0 z-10 bg-white px-4 py-3'>
+		<header className='sticky top-0 z-10 bg-white px-4 py-3 shadow'>
 			<nav>
 				<div className=''>
 					<div className='flex flex-col lg:flex-row gap-3 items-center'>
-						<div className='flex-left w-full lg:w-auto inline-flex justify-between lg:gap-x-4'>
-							<Link to={'/'} className='text-blue font-bold h1'>
+						<div className='flex-left w-full lg:w-auto inline-flex justify-between items-center lg:gap-x-4'>
+							<Link to={'/'} className='text-blue font-bold h2'>
 								facebook
 							</Link>
-							<div className='search-bar flex items-center px-4 rounded-full bg-gray-200'>
+							<div className='search-bar flex items-center px-4 py-2 rounded-full bg-gray-200'>
 								<label htmlFor='searchBar'>
 									<IoSearchOutline size={20} />
 								</label>
@@ -67,7 +71,7 @@ const Topbar = () => {
 								/>
 							</div>
 						</div>
-						<div className='flex-right text-gray-600 flex justify-between w-full'>
+						<div className='flex-right flex justify-between w-full'>
 							<div className='flex w-3/4 justify-between gap-4'>
 								<Link
 									to={'/'}
@@ -111,31 +115,21 @@ const Topbar = () => {
 								</Link>
 							</div>
 							<div className='flex gap-3'>
-								<div className='hidden lg:block'>
-									<Tooltip label='Messages'>
-										<div className='topbarIconItem text-lg relative cursor-pointer w-10 h-10 bg-gray-200 hover:bg-gray-300 flex justify-center items-center rounded-full'>
-											<FaFacebookMessenger />
-										</div>
-									</Tooltip>
-								</div>
-								<div className='hidden lg:block'>
-									<Tooltip label='Notifications'>
-										<div className='topbarIconItem text-lg relative cursor-pointer w-10 h-10 bg-gray-200 hover:bg-gray-300 flex justify-center items-center rounded-full'>
-											<IoMdNotifications size={24} />
-										</div>
-									</Tooltip>
-								</div>
+								<Chats />
+
+								<Notifications />
+
 								<Dropdown
 									label={
 										<Avatar
-											src={`${PF + 'profile/' + currentUser.profilePicture}`}
-											isOnline={currentUser.isOnline}
+											img={CurrentUser.profilePicture}
 											alt='Profile Photo'
+											overlay
 										/>
 									}
 								>
 									<Link
-										to={`/profile/${currentUser._id}/${currentUser.username}`}
+										to={`/profile/${CurrentUser._id}/${CurrentUser.username}`}
 									>
 										<IoPersonCircleSharp size={22} />
 										View Profile

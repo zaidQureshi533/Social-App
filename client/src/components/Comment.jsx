@@ -10,7 +10,7 @@ import {publicRequest} from '../configuration/requestMethod';
 
 const Comment = ({comment, onDelete}) => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-	const {_id, username, profilePicture} = comment.user;
+	const {_id, username, profilePicture} = comment?.user;
 	const {message, image} = comment.body;
 	const [showModal, setShowModal] = useState(false);
 	const currentUser = useSelector((state) => state.user.value);
@@ -22,7 +22,7 @@ const Comment = ({comment, onDelete}) => {
 				onDelete(comment._id);
 			})
 			.catch((error) => {
-				console.log(error.message);
+				console.log(error.response.data.message);
 			});
 	};
 
@@ -30,14 +30,14 @@ const Comment = ({comment, onDelete}) => {
 		<div className='commentWrapper'>
 			<div className='commentBody flex gap-x-2'>
 				<Link to={`/profile/${_id}/${username}`} className='self-start'>
-					<Avatar src={`${PF + 'profile/' + profilePicture}`} size="34px" />
+					<Avatar img={profilePicture} size='34px' />
 				</Link>
 				<div className='commentContent flex gap-4 '>
 					<div className='comment min-w-36'>
 						<div className={`${message && 'bg-gray-100'} rounded-lg py-2 px-3`}>
 							<Link
 								to={`/profile/${_id}/${username}`}
-								className='font-bold hover:underline h4'
+								className='font-bold hover:underline h6'
 							>
 								{username}
 							</Link>
@@ -53,7 +53,7 @@ const Comment = ({comment, onDelete}) => {
 						)}
 						<div className='flex gap-10 px-2 select-none mt-1'>
 							<span className='text-xs'>{format(comment.createdAt)}</span>
-							<span className='font-semibold text-xs'>Like</span>
+							<span className='text-xs cursor-pointer'>Like</span>
 						</div>
 					</div>
 					{comment.user._id === currentUser._id && (
@@ -64,11 +64,11 @@ const Comment = ({comment, onDelete}) => {
 
 							<button onClick={() => setShowModal(true)}>
 								<Modal
-									title={''}
-									message={''}
+									title={'Delete'}
+									message={'Are you sure! you want to delete your comment?'}
 									isOpen={showModal}
-									buttonLabel='Delete'
-									onAction={_id === currentUser._id && handleDeleteComment}
+									buttonLabel='Confirm'
+									onAction={handleDeleteComment}
 									onCancle={() => setShowModal(false)}
 								/>
 								<MdOutlineDelete size={22} /> Delete

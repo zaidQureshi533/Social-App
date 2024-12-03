@@ -45,26 +45,10 @@ const Sidebar = () => {
 	];
 
 	const CurrentUser = useSelector((state) => state.user.value);
-	const API = process.env.SERVER_API;
-
-	const [friends, setFriends] = useState([]);
-
-	useEffect(() => {
-		if (CurrentUser._id) {
-			axios
-				.get(`${API}/users/friends/${CurrentUser._id}`)
-				.then((res) => {
-					setFriends(res.data);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
-	}, [CurrentUser._id]);
 
 	return (
 		<>
-			<div className='sticky top-14 overflow-y-auto h-screen scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-400 shadow-md'>
+			<div className='sticky bg-white top-14 overflow-y-auto h-screen scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-400 shadow-md'>
 				<ul className='font-medium mt-2'>
 					{navItem.map((item) => {
 						const {icon, label} = item;
@@ -75,7 +59,7 @@ const Sidebar = () => {
 							>
 								<a href='#' className='flex items-center p-2'>
 									{icon}
-									<span className='ms-5 text-gray-700 '>{label}</span>
+									<span className='ms-5 h5'>{label}</span>
 								</a>
 							</li>
 						);
@@ -87,13 +71,6 @@ const Sidebar = () => {
 				>
 					Show more
 				</button>
-
-				<hr />
-				<ul className='font-medium'>
-					{friends.map((friend) => {
-						return <CloseFriend user={friend} key={friend._id} />;
-					})}
-				</ul>
 			</div>
 		</>
 	);

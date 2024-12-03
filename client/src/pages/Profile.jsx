@@ -9,6 +9,7 @@ import {FaCamera} from 'react-icons/fa';
 import {publicRequest} from '../configuration/requestMethod';
 import {UploadImage} from '../configuration/apiCalls';
 import Modal from '../components/Modal';
+import {format} from 'timeago.js';
 const Profile = () => {
 	const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -19,10 +20,10 @@ const Profile = () => {
 	const CurrentUser = useSelector((state) => state.user.value);
 
 	useEffect(() => {
-		publicRequest
-			.get(`/users/${userId}`)
-			.then((res) => setUser(res.data))
-			.catch((error) => console.log(error));
+			publicRequest
+				.get(`/users/${userId}`)
+				.then((res) => setUser(res.data))
+				.catch((error) => console.log(error));
 	}, [userId]);
 
 	// update profile picture
@@ -58,6 +59,7 @@ const Profile = () => {
 		setFile(null);
 		fileInputRef.current.value = '';
 	};
+
 	return (
 		<>
 			<Topbar />
@@ -116,21 +118,21 @@ const Profile = () => {
 										)}
 									</div>
 									<div className='profileInfo pt-2 flex flex-col items-center'>
-										<h2 className='profileName font-bold text-gray-700'>
-											{user.username}
-										</h2>
-										<span className='profileDesc cursor-pointer hover:underline font-light'>
-											{user.desc}
-										</span>
+										<h3 className='profileName font-bold'>{user.username}</h3>
+										{userId !== CurrentUser._id && !user.isOnline && (
+											<span className='text-xs'>{`Last active ${format(
+												user.updatedAt
+											)}`}</span>
+										)}
 									</div>
 								</div>
 							</div>
 						</div>
-						<div className='profileRightbarBottom flex'>
+						<div className='profileRightbarBottom flex flex-col-reverse lg:flex-row'>
 							<div className='w-full lg:w-2/3'>
 								<Feed />
 							</div>
-							<div className='w-1/3 hidden lg:block'>
+							<div className='w-full lg:w-1/3'>
 								<Rightbar user={user} />
 							</div>
 						</div>

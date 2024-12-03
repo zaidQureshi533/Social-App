@@ -7,8 +7,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 const secretKey = 'securedauthentication';
 
-
-
 const registerController = async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -73,8 +71,6 @@ const loginController = async (req, res) => {
 				message: 'try to login with correct credentials',
 			});
 		}
-
-		await User.findByIdAndUpdate(user._id, {isOnline: true});
 
 		const data = {
 			id: user._id,

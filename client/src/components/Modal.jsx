@@ -55,7 +55,7 @@ export default function Modal({
 											{title ? title : 'Modal Title'}
 										</DialogTitle>
 										<div className='mt-2'>
-											<p className='text-sm text-gray-500'>
+											<p className='text-sm text-gray-500 mt-2'>
 												{message ? message : 'Modal Message'}
 											</p>
 										</div>

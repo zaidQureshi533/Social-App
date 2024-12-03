@@ -20,9 +20,6 @@ const UserSchema = new Schema(
 			required: true,
 			min: 6,
 		},
-		DOB: {
-			type: Date,
-		},
 		profilePicture: {
 			type: String,
 			default: 'noAvatar.jpg',
@@ -31,6 +28,14 @@ const UserSchema = new Schema(
 			type: String,
 			default: 'noCover.jpg',
 		},
+		DOB: {
+			type: String,
+			default: '',
+		},
+		gender: {
+			type: String,
+			default: '',
+		},
 		followers: {
 			type: Array,
 			default: [],
@@ -38,15 +43,6 @@ const UserSchema = new Schema(
 		followings: {
 			type: Array,
 			default: [],
-		},
-		isAdmin: {
-			type: Boolean,
-			default: false,
-		},
-		desc: {
-			type: String,
-			default: '',
-			max: 50,
 		},
 		city: {
 			type: String,
@@ -67,10 +63,7 @@ const UserSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-		resetToken: {
-			type: String,
-			default: '',
-		},
+		lastActive: Date,
 	},
 	{timestamps: true}
 );

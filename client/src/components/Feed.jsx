@@ -1,9 +1,9 @@
-import React, {useEffect, useState, lazy} from 'react';
+import React, {useEffect, useState} from 'react';
 import Share from './Share';
 import {useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {publicRequest} from '../configuration/requestMethod';
-const Post = lazy(() => import('./Post'));
+import Post from './Post';
 
 const Feed = () => {
 	const {userId} = useParams();

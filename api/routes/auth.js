@@ -1,6 +1,6 @@
 import express from 'express';
 import {body} from 'express-validator';
-import User from '../models/User.js';
+
 import {
 	registerController,
 	loginController,
@@ -43,12 +43,5 @@ router.post(
 	],
 	loginController
 );
-
-// Logout User
-router.post('/logout/:userId', async (req, res) => {
-	const Id = req.params.userId;
-	await User.findByIdAndUpdate(Id, {isOnline: false});
-	res.status(200).send('logout successfully');
-});
 
 export default router;

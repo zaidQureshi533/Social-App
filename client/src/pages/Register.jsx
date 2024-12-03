@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {publicRequest} from '../configuration/requestMethod';
-import {ThemeContext} from '../App';
 import {MdVisibility, MdVisibilityOff} from '../components/icons';
+import {useDispatch} from 'react-redux';
+import {showAlert} from '../store/states/alertSlice';
 const Register = () => {
-	const {showAlert} = useContext(ThemeContext);
+	const dispatch = useDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const {
 		register,
@@ -43,7 +44,9 @@ const Register = () => {
 			})
 			.catch((error) => {
 				setIsFetching(false);
-				showAlert('danger', error.response.data.message);
+				dispatch(
+					showAlert({type: 'danger', message: error.response.data.message})
+				);
 			});
 	};
 
@@ -53,14 +56,14 @@ const Register = () => {
 
 	return (
 		<div className='register w-full md:h-dvh bg-[#f0f2f5] flex items-center justify-center'>
-			<div className='registerWrapper w-full md:w-[70%] p-12 md:p-0 flex flex-col md:flex-row'>
+			<div className='registerWrapper w-full md:w-[70%] p-12 md:p-0 flex flex-col md:flex-row md:gap-10'>
 				<div className='registerLeft flex-1 flex flex-col justify-center mb-10 md:m-0'>
-					<h3 className='registerLogo text-[50px] font-extrabold text-[#3e62da] mb-2'>
+					<div className='loginLogo text-[30px] md:text-[60px] font-extrabold text-blue mb-2'>
 						facebook
-					</h3>
-					<span className='registerDescription text-xl font-medium pe-10'>
-						Connect with friends and the world around you on facebook.
-					</span>
+					</div>
+					<h4 className='loginDescription'>
+						Facebook helps you connect and share with the people in your life.
+					</h4>
 				</div>
 				<div className='registerRight flex-1 flex flex-col'>
 					<form
@@ -159,7 +162,7 @@ const Register = () => {
 						<button
 							disabled={isFetching}
 							type='submit'
-							className='signupButton bg-[#3e62da] text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150 outline-none'
+							className='signupButton bg-[#3e62da] h5 text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150 outline-none'
 						>
 							{isFetching ? 'Creating Account...' : 'Sign Up'}
 						</button>
@@ -169,7 +172,7 @@ const Register = () => {
 						<hr />
 						<Link
 							to='/login'
-							className='registerButton text-center text-xl bg-[#4bbe2e] text-white py-3 font-bold rounded-md hover:bg-[#4bbe2e]/90 hover:shadow-md transition-all duration-150 outline-none'
+							className='registerButton text-center h5 bg-[#4bbe2e] text-white py-3 font-bold rounded-md hover:bg-[#4bbe2e]/90 hover:shadow-md transition-all duration-150 outline-none'
 						>
 							Sign In
 						</Link>

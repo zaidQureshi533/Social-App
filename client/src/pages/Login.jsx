@@ -1,13 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, { useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {login} from '../store/states/userSlice';
 import {publicRequest} from '../configuration/requestMethod';
 import {MdVisibility, MdVisibilityOff} from '../components/icons';
-import {ThemeContext} from '../App';
-const Login = () => {
-	const {showAlert} = useContext(ThemeContext);
+import {showAlert} from '../store/states/alertSlice';
+
+const Login = ({token}) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
 	const {
@@ -22,25 +21,27 @@ const Login = () => {
 			.then((res) => {
 				if (res.data.success) {
 					localStorage.setItem('token', res.data.token);
-					dispatch(login({isOnline: res.data}));
+					token(res.data.token);
 				}
 			})
 			.catch((error) => {
-				showAlert('danger', error.response.data.message);
+				dispatch(
+					showAlert({type: 'danger', message: error.response.data.message})
+				);
 			});
 	};
 
 	return (
 		<>
-			<div className='login w-full md:h-dvh bg-[#f0f2f5] flex items-center justify-center'>
+			<div className='login min-w-full md:h-dvh bg-[#f0f2f5] flex items-center justify-center'>
 				<div className='loginWrapper w-full md:w-[70%] p-12 md:p-0 flex flex-col md:flex-row'>
 					<div className='loginLeft flex-1 flex flex-col justify-center mb-10 md:m-0 select-none'>
-						<h3 className='loginLogo text-[60px] font-extrabold text-blue mb-2'>
-							facebook
-						</h3>
-						<span className='loginDescription text-2xl font-medium pe-10'>
-							Facebook helps you connect and share with the people in your life.
-						</span>
+						<h1 className='loginLogo font-extrabold text-blue mb-2'>
+						Zaid Social
+						</h1>
+						<h4 className='loginDescription'>
+						Zaid Social helps you connect and share with the people in your life.
+						</h4>
 					</div>
 					<div className='loginRight flex-1 flex flex-col items-center'>
 						<form
@@ -78,7 +79,6 @@ const Login = () => {
 									autoComplete='false'
 								/>
 								<button
-									tabIndex={-1}
 									type='button'
 									className='absolute right-3 top-4 text-gray-600 focus:outline-none'
 									onClick={() => setShowPassword(!showPassword)}
@@ -92,19 +92,17 @@ const Login = () => {
 							</div>
 							<button
 								type='submit'
-								className='loginButton text-xl bg-blue text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150 outline-none'
+								className='loginButton h5 bg-blue text-white py-3 font-bold rounded-md hover:bg-[#3e62da]/90 hover:shadow-md transition-all duration-150 outline-none'
 							>
 								Log In
 							</button>
-							<span
-								className='forgotPassword text-blue-700 cursor-pointer hover:underline text-center text-sm outline-none'
-							>
+							<span className='forgotPassword text-blue-700 cursor-pointer hover:underline text-center text-sm outline-none'>
 								Forget Password?
 							</span>
-							<hr className='mt-2' />
+							<hr />
 							<Link
 								to={'/register'}
-								className='loginButton text-center text-xl bg-[#4bbe2e] text-white py-3 font-bold rounded-md hover:bg-[#4bbe2e]/90 hover:shadow-md transition-all duration-150 outline-none'
+								className='loginButton text-center h5 bg-[#4bbe2e] text-white py-3 font-bold rounded-md hover:bg-[#4bbe2e]/90 hover:shadow-md transition-all duration-150 outline-none'
 							>
 								Create new account
 							</Link>
