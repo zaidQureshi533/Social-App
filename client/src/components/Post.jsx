@@ -5,7 +5,7 @@ import Avatar from './Avatar';
 import Dropdown from './Dropdown';
 import {Link} from 'react-router-dom';
 import {publicRequest} from '../configuration/requestMethod';
-import {showAlert} from '../store/states/alertSlice';
+import {errorAlert} from '../store/states/alertSlice';
 import {
 	BiHide,
 	BiSolidLike,
@@ -49,11 +49,11 @@ const Post = ({post, onDeletePost, postId}) => {
 			.catch((error) => {
 				if (error.response) {
 					dispatch(
-						showAlert({type: danger, message: error.response.data.message})
+						errorAlert(error.response.data.message)
 					);
 				} else {
 					dispatch(
-						showAlert({type: danger, message: 'an unknown error occured'})
+						errorAlert('an unknown error occured')
 					);
 				}
 			});

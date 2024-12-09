@@ -4,7 +4,7 @@ import {useForm} from 'react-hook-form';
 import {publicRequest} from '../configuration/requestMethod';
 import {MdVisibility, MdVisibilityOff} from '../components/icons';
 import {useDispatch} from 'react-redux';
-import {showAlert} from '../store/states/alertSlice';
+import {errorAlert} from '../store/states/alertSlice';
 const Register = () => {
 	const dispatch = useDispatch();
 	const [showPassword, setShowPassword] = useState(false);
@@ -44,9 +44,7 @@ const Register = () => {
 			})
 			.catch((error) => {
 				setIsFetching(false);
-				dispatch(
-					showAlert({type: 'danger', message: error.response.data.message})
-				);
+				dispatch(errorAlert(error.response.data.message));
 			});
 	};
 

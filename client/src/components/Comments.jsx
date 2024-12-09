@@ -5,7 +5,7 @@ import {publicRequest} from '../configuration/requestMethod';
 import {UploadImage} from '../configuration/apiCalls';
 import {LuImagePlus, FiSend, MdClose} from './icons';
 import {useSelector} from 'react-redux';
-import {showAlert} from '../store/states/alertSlice';
+import {errorAlert} from '../store/states/alertSlice';
 import {socket} from '../configuration/socket';
 const Comments = ({postId, comments, updateComments}) => {
 	const [showMore, setShowMore] = useState(5);

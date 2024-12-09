@@ -1,10 +1,10 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {publicRequest} from '../configuration/requestMethod';
 import {MdVisibility, MdVisibilityOff} from '../components/icons';
-import {showAlert} from '../store/states/alertSlice';
+import {errorAlert} from '../store/states/alertSlice';
 
 const Login = ({token}) => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -25,9 +25,7 @@ const Login = ({token}) => {
 				}
 			})
 			.catch((error) => {
-				dispatch(
-					showAlert({type: 'danger', message: error.response.data.message})
-				);
+				dispatch(errorAlert(error.response.data.message));
 			});
 	};
 
@@ -37,10 +35,11 @@ const Login = ({token}) => {
 				<div className='loginWrapper w-full md:w-[70%] p-12 md:p-0 flex flex-col md:flex-row'>
 					<div className='loginLeft flex-1 flex flex-col justify-center mb-10 md:m-0 select-none'>
 						<h1 className='loginLogo font-extrabold text-blue mb-2'>
-						Zaid Social
+							Zaid Social
 						</h1>
 						<h4 className='loginDescription'>
-						Zaid Social helps you connect and share with the people in your life.
+							Zaid Social helps you connect and share with the people in your
+							life.
 						</h4>
 					</div>
 					<div className='loginRight flex-1 flex flex-col items-center'>
